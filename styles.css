@@ -64,7 +64,7 @@ nav {
   position: relative;
   cursor: pointer;
 }
-.navbar-shopping-cart div {
+.carrito-background {
   width: 16px;
   height: 16px;
   background-color: var(--hospital-green);
@@ -252,6 +252,7 @@ nav {
   height: 240px;
   border-radius: 20px;
   object-fit: cover;
+  cursor: pointer;
 }
 .product-info {
   display: flex;
@@ -353,6 +354,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 @media (max-width: 640px) {

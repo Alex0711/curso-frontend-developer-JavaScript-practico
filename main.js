@@ -28,9 +28,10 @@ function closeAll() {
 }
 
 function openDetail(product) {
-  console.log('click')
+  console.log("click");
   closeAll();
-  deleteDetail();
+  const productDetail = document.querySelector(".detail");
+  productDetail.innerHTML = "";
 
   detail.classList.remove("toggleMenu");
   detail.innerHTML = `
@@ -55,11 +56,11 @@ function openDetail(product) {
   </div>`;
   const close = document.querySelector(".detail-close");
   close.addEventListener("click", toggleMenu);
-}
 
-function deleteDetail() {
-  const productDetail = document.querySelector(".detail");
-  productDetail.innerHTML = "";
+  const button = document.querySelector(".add-to-cart-button");
+  button.addEventListener("click", () => {
+    addToCart(product);
+  });
 }
 
 //abrir y cerrar los menus
@@ -108,6 +109,73 @@ function toggleMenu(event) {
     }
     open.classList.toggle("toggleMenu");
   }
+}
+/*
+<div class="my-order-content">
+  <div class="shopping-cart">
+    <figure>
+      <img src="https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="bike">
+    </figure>
+    <p>Bike</p>
+    <p>$30,00</p>
+    <img src="./icons/icon_close.png" alt="close">
+  </div>
+*/
+const myCart = [];
+//Add to cart
+function setCart(product) {
+  if (typeof(product) === 'object'){
+    myCart.push(product);
+  } else if (typeof(product) === 'string'){
+    myCart.pop(Number(product) - 1);
+  }
+  const cart = document.getElementById("cart");
+  cart.innerText = myCart.length;
+
+  if (myCart.length > 0) {
+    cart.classList.add("carrito-background");
+  } else {
+    cart.innerText = ''
+    cart.classList.remove("carrito-background");
+  }
+}
+
+function addToCart(product) {
+  setCart(product)
+  const myOrder = document.querySelector('.my-order-content');
+
+  const div = document.createElement('div');
+  div.classList.add('shopping-cart');
+  div.setAttribute('id', `${myCart.length}`);
+
+  const figure = document.createElement('figure');
+
+  const img = document.createElement('img');
+  img.setAttribute('src', `${product.image}`);
+  img.setAttribute('alt', `${product.name}`);
+
+  const name = document.createElement('p');
+  name.innerText = `${product.name}`;
+
+  const price = document.createElement('p');
+  price.innerText = `${product.price}`;
+
+  const x = document.createElement('img');
+  x.setAttribute('src', './icons/icon_close.png');
+  x.setAttribute('alt', 'x');
+
+  figure.appendChild(img)
+  div.append(figure, name, price, x)
+  myOrder.appendChild(div);
+
+  div.addEventListener("click", deleteToCart);
+  console.log(div);
+}
+
+function deleteToCart(event) {
+  setCart(event.path[1].id)
+  const item = document.getElementById(event.path[1].id);
+  item.remove();
 }
 
 //products
@@ -219,6 +287,10 @@ function getProducts(arr) {
 
     const cartImg = document.createElement("img");
     cartImg.setAttribute("src", "./icons/bt_add_to_cart.svg");
+    cartImg.classList.add("add-to-cart-button");
+    cartImg.addEventListener("click", () => {
+      addToCart(product);
+    });
     figure.append(cartImg);
 
     cardsContainer.append(productCard);
