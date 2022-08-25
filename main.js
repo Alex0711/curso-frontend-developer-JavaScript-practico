@@ -110,24 +110,17 @@ function toggleMenu(event) {
     open.classList.toggle("toggleMenu");
   }
 }
-/*
-<div class="my-order-content">
-  <div class="shopping-cart">
-    <figure>
-      <img src="https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="bike">
-    </figure>
-    <p>Bike</p>
-    <p>$30,00</p>
-    <img src="./icons/icon_close.png" alt="close">
-  </div>
-*/
-const myCart = [];
+
 //Add to cart
-function setCart(product) {
+const myCart = [];
+let myCheck = 0
+function setCart(product, price) {
   if (typeof(product) === 'object'){
     myCart.push(product);
+    myCheck += product.price;
   } else if (typeof(product) === 'string'){
     myCart.pop(Number(product) - 1);
+    myCheck -= Number(price);
   }
   const cart = document.getElementById("cart");
   cart.innerText = myCart.length;
@@ -138,6 +131,9 @@ function setCart(product) {
     cart.innerText = ''
     cart.classList.remove("carrito-background");
   }
+
+  const check = document.getElementById('check');
+  check.innerText = myCheck
 }
 
 function addToCart(product) {
@@ -163,17 +159,16 @@ function addToCart(product) {
   const x = document.createElement('img');
   x.setAttribute('src', './icons/icon_close.png');
   x.setAttribute('alt', 'x');
+  x.addEventListener("click", (event) => {deleteToCart(event, product)});
 
   figure.appendChild(img)
   div.append(figure, name, price, x)
   myOrder.appendChild(div);
 
-  div.addEventListener("click", deleteToCart);
-  console.log(div);
 }
 
-function deleteToCart(event) {
-  setCart(event.path[1].id)
+function deleteToCart(event, product) {
+  setCart(event.path[1].id, product.price)
   const item = document.getElementById(event.path[1].id);
   item.remove();
 }
